@@ -308,16 +308,24 @@ namespace SmartCuff
             }
         }
 
+        dynamic ESX;
         private void CreateCommand(bool permissions)
         {
             RegisterCommand("frontcuff", new Action<string, List<object>, string>((source, args, raw) =>
             {
                 if (useId)
                 {
+                    var xPlayer = ESX.GetPlayerFromId(source);
+                    var Job = xPlayer.getJob();
+                    
                     int argsInt = 0;
                     Int32.TryParse(Convert.ToString(args[0]), out argsInt);
 
-                    if (GetPlayerServerId(PlayerId()) == argsInt)
+                    if (Job.name != "esx_policejob")
+                    {
+                        Screen.ShowNotification("You need to be part of the police force to do this.");
+                    }
+                    else if (GetPlayerServerId(PlayerId()) == argsInt)
                     {
                         Screen.ShowNotification("You are not able to cuff yourself.");
                     }
@@ -338,10 +346,17 @@ namespace SmartCuff
             {
                 if (useId)
                 {
+                    var xPlayer = ESX.GetPlayerFromId(source);
+                    var Job = xPlayer.getJob();
+                    
                     int argsInt = 0;
                     Int32.TryParse(Convert.ToString(args[0]), out argsInt);
-
-                    if (GetPlayerServerId(PlayerId()) == argsInt)
+                    
+                    if (Job.name != "esx_policejob")
+                    {
+                        Screen.ShowNotification("You need to be part of the police force to do this.");
+                    }
+                    else if (GetPlayerServerId(PlayerId()) == argsInt)
                     {
                         Screen.ShowNotification("You are not able to cuff yourself.");
                     }
